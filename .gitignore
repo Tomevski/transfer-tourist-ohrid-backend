@@ -1,0 +1,27 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### IDE ###
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Logs / env ###
+*.log
+.env
+
+### Spring Boot ###
+application-local.properties
+application-local.yml
+application-dev.properties
+application-dev.yml
+
+### Maven ###
+.mvn/timing.properties

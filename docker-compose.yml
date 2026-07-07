@@ -1,0 +1,22 @@
+# Local Postgres for development. Start with: docker compose up -d
+# Matches the defaults in application-dev.yml.
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: transfer-tourist-db
+    environment:
+      POSTGRES_DB: transfer_tourist
+      POSTGRES_USER: transfer
+      POSTGRES_PASSWORD: transfer
+    ports:
+      - "5432:5432"
+    volumes:
+      - transfer_tourist_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U transfer -d transfer_tourist"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  transfer_tourist_pgdata:
