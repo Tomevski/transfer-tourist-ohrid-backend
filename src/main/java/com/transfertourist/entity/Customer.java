@@ -19,8 +19,8 @@ public class Customer {
     @Column(name = "customer_phone", nullable = false, length = 40)
     private String phone;
 
-    protected Customer() {
-        // JPA
+    public Customer() {
+        // JPA + service construction
     }
 
     public String getFirstName() {

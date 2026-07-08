@@ -39,8 +39,8 @@ public class Leg {
     @Column(name = "pickup_time", length = 5)
     private String pickupTime;
 
-    protected Leg() {
-        // JPA
+    public Leg() {
+        // JPA + service construction
     }
 
     public String getFromLocationId() {

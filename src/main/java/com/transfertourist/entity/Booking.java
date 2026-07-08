@@ -96,8 +96,8 @@ public class Booking {
     @Column(name = "confirmed_at")
     private Instant confirmedAt;
 
-    protected Booking() {
-        // JPA
+    public Booking() {
+        // JPA + service construction
     }
 
     public String getId() {
