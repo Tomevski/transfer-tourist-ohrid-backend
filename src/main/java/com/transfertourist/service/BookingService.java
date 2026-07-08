@@ -10,7 +10,6 @@ import com.transfertourist.entity.Vehicle;
 import com.transfertourist.exception.BusinessRuleException;
 import com.transfertourist.exception.ResourceNotFoundException;
 import com.transfertourist.mapper.BookingMapper;
-import com.transfertourist.repository.AppSettingRepository;
 import com.transfertourist.repository.BookingRepository;
 import com.transfertourist.repository.TransferPriceRepository;
 import com.transfertourist.repository.VehicleRepository;
@@ -32,26 +31,23 @@ import java.util.UUID;
 @Service
 public class BookingService {
 
-    private static final String INFANT_SEAT_PRICE_KEY = "infant_seat_price";
-    private static final BigDecimal DEFAULT_INFANT_SEAT_PRICE = BigDecimal.TEN;
-
     private final BookingRepository bookingRepository;
     private final VehicleRepository vehicleRepository;
     private final TransferPriceRepository transferPriceRepository;
-    private final AppSettingRepository appSettingRepository;
+    private final SettingService settingService;
     private final BookingMapper bookingMapper;
     private final ReferenceCodeGenerator referenceCodeGenerator;
 
     public BookingService(BookingRepository bookingRepository,
                           VehicleRepository vehicleRepository,
                           TransferPriceRepository transferPriceRepository,
-                          AppSettingRepository appSettingRepository,
+                          SettingService settingService,
                           BookingMapper bookingMapper,
                           ReferenceCodeGenerator referenceCodeGenerator) {
         this.bookingRepository = bookingRepository;
         this.vehicleRepository = vehicleRepository;
         this.transferPriceRepository = transferPriceRepository;
-        this.appSettingRepository = appSettingRepository;
+        this.settingService = settingService;
         this.bookingMapper = bookingMapper;
         this.referenceCodeGenerator = referenceCodeGenerator;
     }
@@ -81,7 +77,7 @@ public class BookingService {
                 : null;
 
         int legs = isReturn ? 2 : 1;
-        BigDecimal infantSeatsTotal = infantSeatPrice()
+        BigDecimal infantSeatsTotal = settingService.infantSeatPrice()
                 .multiply(BigDecimal.valueOf((long) request.infantSeats() * legs));
         BigDecimal total = outboundPrice
                 .add(returnPrice != null ? returnPrice : BigDecimal.ZERO)
@@ -109,12 +105,6 @@ public class BookingService {
         return transferPriceRepository
                 .findByFromLocation_IdAndToLocation_IdAndVehicle_Id(fromId, toId, vehicleId)
                 .map(TransferPrice::getPrice);
-    }
-
-    private BigDecimal infantSeatPrice() {
-        return appSettingRepository.findById(INFANT_SEAT_PRICE_KEY)
-                .map(setting -> new BigDecimal(setting.getValue()))
-                .orElse(DEFAULT_INFANT_SEAT_PRICE);
     }
 
     private String uniqueReferenceCode() {

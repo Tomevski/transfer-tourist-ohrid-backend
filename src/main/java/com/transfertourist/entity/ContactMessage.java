@@ -34,8 +34,8 @@ public class ContactMessage {
     @Column(nullable = false)
     private boolean handled = false;
 
-    protected ContactMessage() {
-        // JPA
+    public ContactMessage() {
+        // JPA + service construction
     }
 
     public String getId() {
