@@ -35,3 +35,13 @@ management:
 app:
   cors:
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:5173}
+  # Stateless JWT auth (Milestone 2.4). The secret MUST be overridden in prod
+  # (>= 32 bytes for HS256); the default below is for local dev only.
+  jwt:
+    secret: ${APP_JWT_SECRET:dev-only-insecure-secret-change-me-in-production-0123456789}
+    expiration-ms: ${APP_JWT_EXPIRATION_MS:86400000} # 24h
+  # Admin account seeded at startup if absent. Override the password in prod.
+  admin:
+    email: ${APP_ADMIN_EMAIL:admin@transfertourist.com}
+    password: ${APP_ADMIN_PASSWORD:admin123}
+    name: ${APP_ADMIN_NAME:Ana (Admin)}

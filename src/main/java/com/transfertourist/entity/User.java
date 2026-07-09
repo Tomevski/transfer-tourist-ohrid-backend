@@ -26,6 +26,9 @@ public class User {
     @Column(nullable = false, unique = true, length = 160)
     private String email;
 
+    @Column(nullable = false, length = 120)
+    private String name;
+
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
@@ -36,8 +39,8 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    protected User() {
-        // JPA
+    public User() {
+        // JPA + AdminSeeder
     }
 
     public String getId() {
@@ -54,6 +57,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPasswordHash() {
