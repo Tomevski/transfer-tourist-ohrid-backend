@@ -47,8 +47,8 @@ public class Location {
     @Column(name = "sort_order", nullable = false)
     private int sortOrder;
 
-    protected Location() {
-        // JPA
+    public Location() {
+        // JPA + admin create
     }
 
     public String getId() {

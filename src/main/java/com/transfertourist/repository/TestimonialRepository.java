@@ -7,7 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface TestimonialRepository extends JpaRepository<Testimonial, String> {
+
+    /** Admin list: every testimonial (incl. unpublished), newest first. */
+    List<Testimonial> findAllByOrderByCreatedAtDesc();
 
     /**
      * Published testimonials, optionally filtered by exact rating and a

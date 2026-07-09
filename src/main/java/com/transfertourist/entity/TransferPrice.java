@@ -43,8 +43,8 @@ public class TransferPrice {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    protected TransferPrice() {
-        // JPA
+    public TransferPrice() {
+        // JPA + admin create
     }
 
     public String getId() {

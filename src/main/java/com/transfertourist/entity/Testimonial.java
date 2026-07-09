@@ -37,8 +37,8 @@ public class Testimonial {
     @Column(nullable = false)
     private boolean published = true;
 
-    protected Testimonial() {
-        // JPA
+    public Testimonial() {
+        // JPA + admin create
     }
 
     public String getId() {

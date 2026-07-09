@@ -16,4 +16,10 @@ public interface TransferPriceRepository extends JpaRepository<TransferPrice, St
 
     boolean existsByFromLocation_IdAndToLocation_IdAndVehicle_Id(
             String fromLocationId, String toLocationId, String vehicleId);
+
+    /** True if the location is on either side of any transfer price (delete guard). */
+    boolean existsByFromLocation_IdOrToLocation_Id(String fromLocationId, String toLocationId);
+
+    /** True if any transfer price uses the given vehicle (delete guard). */
+    boolean existsByVehicle_Id(String vehicleId);
 }

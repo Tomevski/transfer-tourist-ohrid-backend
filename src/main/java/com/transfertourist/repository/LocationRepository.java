@@ -13,6 +13,9 @@ public interface LocationRepository extends JpaRepository<Location, String> {
 
     List<Location> findByCategoryAndActiveTrueOrderBySortOrderAsc(LocationCategory category);
 
+    /** Admin list: every location (incl. inactive), category then sort order. */
+    List<Location> findAllByOrderByCategoryAscSortOrderAsc();
+
     Optional<Location> findBySlug(String slug);
 
     boolean existsBySlug(String slug);

@@ -48,8 +48,8 @@ public class Vehicle {
     @Column(name = "sort_order", nullable = false)
     private int sortOrder;
 
-    protected Vehicle() {
-        // JPA
+    public Vehicle() {
+        // JPA + admin create
     }
 
     public String getId() {
