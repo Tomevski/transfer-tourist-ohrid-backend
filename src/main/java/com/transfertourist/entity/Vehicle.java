@@ -39,7 +39,7 @@ public class Vehicle {
     @Column(name = "label", nullable = false, length = 120)
     private List<String> features = new ArrayList<>();
 
-    @Column(name = "image_url", nullable = false, length = 255)
+    @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
     @Column(nullable = false)

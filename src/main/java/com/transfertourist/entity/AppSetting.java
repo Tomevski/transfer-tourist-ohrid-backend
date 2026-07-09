@@ -22,10 +22,10 @@ public class AppSetting {
     @Column(name = "\"key\"", length = 64)
     private String key;
 
-    @Column(name = "\"value\"", nullable = false, length = 255)
+    @Column(name = "\"value\"", nullable = false)
     private String value;
 
-    @Column(length = 255)
+    @Column
     private String description;
 
     @Column(name = "updated_at", nullable = false)

@@ -1,7 +1,6 @@
 package com.transfertourist.entity;
 
 import com.transfertourist.constants.TransferPurpose;
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,33 +9,30 @@ import java.time.LocalDate;
 
 /**
  * A single directional leg (outbound or return) of a booking. Embedded twice in
- * {@link Booking} with column-name overrides. Location ids are stored as plain
- * strings (mirroring the DTO shape); times are {@code HH:mm} strings kept
- * timezone-agnostic, matching the frontend so comparisons stay identical.
+ * {@link Booking}, which supplies every column mapping (name/nullable/length) via
+ * {@code @AttributeOverride} — the outbound leg's columns are NOT NULL, the
+ * return leg's are nullable. This embeddable therefore declares no {@code @Column}
+ * metadata of its own (it owns no table); only field-type annotations such as
+ * {@link Enumerated} live here. Location ids are plain strings (mirroring the DTO
+ * shape); times are {@code HH:mm} strings kept timezone-agnostic, matching the
+ * frontend so comparisons stay identical.
  */
 @Embeddable
 public class Leg {
 
-    @Column(name = "from_location_id", nullable = false, length = 64)
     private String fromLocationId;
 
-    @Column(name = "to_location_id", nullable = false, length = 64)
     private String toLocationId;
 
-    @Column(name = "date", nullable = false)
     private LocalDate date;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "purpose", nullable = false, length = 16)
     private TransferPurpose purpose;
 
-    @Column(name = "flight_number", length = 20)
     private String flightNumber;
 
-    @Column(name = "flight_time", length = 5)
     private String flightTime;
 
-    @Column(name = "pickup_time", length = 5)
     private String pickupTime;
 
     public Leg() {
