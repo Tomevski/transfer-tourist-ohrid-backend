@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!-- To the customer: booking confirmed. Reply-to = operator. -->
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{email/_layout :: page('Your transfer is confirmed', ~{::content})}">
+<body>
+<div th:fragment="content">
+
+  <p style="margin:0;">Hi <span th:text="${booking.customer.firstName}">there</span>,</p>
+  <p style="margin:12px 0 0 0;">
+    Great news &mdash; your transfer is <strong style="color:#2f80ed;">confirmed</strong>!
+    Your driver will be arranged for the details below. Please keep your reference code handy.
+  </p>
+
+  <div th:replace="~{email/_layout :: refBadge(${booking.referenceCode})}">badge</div>
+
+  <table th:replace="~{email/_layout :: legBlock('Outbound trip', ${booking.outbound})}">outbound</table>
+  <table th:replace="${booking.returnLeg != null} ? ~{email/_layout :: legBlock('Return trip', ${booking.returnLeg})} : ~{}">return</table>
+
+  <h3 style="margin:22px 0 4px 0;font-size:15px;color:#1f2d3d;">Your booking</h3>
+  <table th:replace="~{email/_layout :: tripSummary(${booking})}">summary</table>
+
+  <p style="margin:20px 0 0 0;">
+    If anything changes or you have questions, just reply to this email.
+  </p>
+  <p style="margin:12px 0 0 0;">We look forward to welcoming you to Ohrid!<br/>The Transfer Tourist Ohrid team</p>
+
+</div>
+</body>
+</html>

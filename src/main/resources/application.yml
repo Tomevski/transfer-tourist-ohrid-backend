@@ -35,6 +35,14 @@ management:
 app:
   cors:
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:5173}
+  # Transactional email (Milestone 2.6). SMTP transport itself is configured per
+  # profile under spring.mail (dev = MailHog, prod = a real provider via env).
+  mail:
+    # Envelope From on every message.
+    from: ${APP_MAIL_FROM:no-reply@transfertourist.com}
+    # Operator/admin inbox that receives new-booking notifications and is the
+    # reply-to on all customer emails. Override per environment via env var.
+    operator: ${APP_MAIL_OPERATOR:htomevski0106@hotmail.com}
   # Stateless JWT auth (Milestone 2.4). The secret MUST be overridden in prod
   # (>= 32 bytes for HS256); the default below is for local dev only.
   jwt:

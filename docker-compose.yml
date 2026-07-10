@@ -18,5 +18,15 @@ services:
       timeout: 5s
       retries: 5
 
+  # Dev SMTP sink (Milestone 2.6). App sends to :1025; open the web UI at
+  # http://localhost:8025 to view every rendered email. Delivers nowhere real.
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: transfer-tourist-mailhog
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # web UI
+    restart: unless-stopped
+
 volumes:
   transfer_tourist_pgdata:

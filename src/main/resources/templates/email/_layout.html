@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!--
+  ONE shared branded layout for all booking emails (light-blue / white).
+  Fragments:
+    page(title, content)  – the outer branded shell; drops `content` into the card.
+    refBadge(code)        – prominent reference-code box.
+    legBlock(label, leg)  – one directional leg (location NAMES, date, flight/pickup).
+    tripSummary(booking)  – trip type / passengers / infant seats / vehicle / total.
+  Styles are inline so they survive Gmail/Outlook (which strip <head><style>).
+  The outer <html>/<body> here are just a valid-document wrapper; only the
+  referenced fragments are ever rendered.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+
+<!-- ============================ PAGE SHELL ============================ -->
+<div th:fragment="page(title, content)"
+     style="margin:0;padding:0;background-color:#eef4fb;font-family:Arial,Helvetica,sans-serif;color:#1f2d3d;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+         style="background-color:#eef4fb;padding:24px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0"
+               style="width:600px;max-width:600px;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+          <tr>
+            <td style="background-color:#2f80ed;padding:20px 32px;">
+              <span style="color:#ffffff;font-size:20px;font-weight:bold;letter-spacing:0.3px;">Transfer Tourist Ohrid</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px 32px 4px 32px;">
+              <h1 style="margin:0;font-size:22px;color:#1f2d3d;" th:text="${title}">Title</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:4px 32px 28px 32px;font-size:15px;line-height:1.6;">
+              <div th:replace="${content}">content</div>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color:#f4f8fd;padding:20px 32px;font-size:12px;color:#7a8aa0;line-height:1.5;">
+              Transfer Tourist Ohrid &middot; Ohrid, North Macedonia<br/>
+              This is an automated message &mdash; simply reply to get in touch with us.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- ============================ REFERENCE BADGE ============================ -->
+<div th:fragment="refBadge(code)"
+     style="margin:18px 0;padding:14px 18px;background:#eef4fb;border:1px dashed #2f80ed;border-radius:8px;">
+  <span style="font-size:12px;color:#7a8aa0;text-transform:uppercase;letter-spacing:0.5px;">Reference code</span><br/>
+  <span style="font-size:22px;font-weight:bold;color:#2f80ed;letter-spacing:1px;" th:text="${code}">TT-XXXXXX</span>
+</div>
+
+<!-- ============================ LEG BLOCK ============================ -->
+<table th:fragment="legBlock(label, leg)" role="presentation" width="100%" cellpadding="0" cellspacing="0"
+       style="margin:12px 0;border:1px solid #e3ebf5;border-radius:8px;border-collapse:separate;">
+  <tr>
+    <td style="background:#f4f8fd;padding:8px 14px;font-weight:bold;font-size:12px;color:#2f80ed;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px 8px 0 0;"
+        th:text="${label}">Outbound</td>
+  </tr>
+  <tr>
+    <td style="padding:12px 14px;">
+      <div style="font-size:16px;font-weight:bold;">
+        <span th:text="${leg.fromLocationName}">From</span>
+        <span style="color:#2f80ed;">&#8594;</span>
+        <span th:text="${leg.toLocationName}">To</span>
+      </div>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:8px;font-size:14px;">
+        <tr>
+          <td style="color:#7a8aa0;width:130px;padding:3px 0;">Date</td>
+          <td th:text="${#temporals.format(leg.date, 'EEE, d MMM yyyy')}">date</td>
+        </tr>
+        <tr>
+          <td style="color:#7a8aa0;padding:3px 0;">Purpose</td>
+          <td th:text="${leg.purposeLabel}">purpose</td>
+        </tr>
+        <tr th:if="${!#strings.isEmpty(leg.flightNumber)}">
+          <td style="color:#7a8aa0;padding:3px 0;">Flight no.</td>
+          <td th:text="${leg.flightNumber}">flight</td>
+        </tr>
+        <tr th:if="${!#strings.isEmpty(leg.flightTime)}">
+          <td style="color:#7a8aa0;padding:3px 0;">Flight time</td>
+          <td th:text="${leg.flightTime}">time</td>
+        </tr>
+        <tr th:if="${!#strings.isEmpty(leg.pickupTime)}">
+          <td style="color:#7a8aa0;padding:3px 0;">Pickup time</td>
+          <td th:text="${leg.pickupTime}">time</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<!-- ============================ TRIP SUMMARY ============================ -->
+<table th:fragment="tripSummary(booking)" role="presentation" width="100%" cellpadding="0" cellspacing="0"
+       style="margin:12px 0;font-size:14px;">
+  <tr>
+    <td style="color:#7a8aa0;width:130px;padding:3px 0;">Trip type</td>
+    <td th:text="${booking.tripType.name() == 'RETURN' ? 'Return' : 'One way'}">One way</td>
+  </tr>
+  <tr>
+    <td style="color:#7a8aa0;padding:3px 0;">Passengers</td>
+    <td th:text="${booking.passengers}">2</td>
+  </tr>
+  <tr>
+    <td style="color:#7a8aa0;padding:3px 0;">Infant seats</td>
+    <td th:text="${booking.infantSeats}">0</td>
+  </tr>
+  <tr>
+    <td style="color:#7a8aa0;padding:3px 0;">Vehicle</td>
+    <td th:text="${booking.vehicleName}">Sedan</td>
+  </tr>
+  <tr>
+    <td style="color:#1f2d3d;padding:8px 0 3px 0;font-weight:bold;">Total</td>
+    <td style="padding:8px 0 3px 0;font-weight:bold;font-size:16px;color:#2f80ed;">
+      &euro;<span th:text="${#numbers.formatDecimal(booking.totalPrice, 1, 2)}">0.00</span>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

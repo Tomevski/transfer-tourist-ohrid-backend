@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!-- To the customer: request received, pending confirmation. Reply-to = operator. -->
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{email/_layout :: page('We received your request', ~{::content})}">
+<body>
+<div th:fragment="content">
+
+  <p style="margin:0;">Hi <span th:text="${booking.customer.firstName}">there</span>,</p>
+  <p style="margin:12px 0 0 0;">
+    Thanks for booking with Transfer Tourist Ohrid! We&rsquo;ve received your transfer
+    request and it&rsquo;s now <strong>pending confirmation</strong>. We&rsquo;ll review it
+    and get back to you shortly to confirm the details.
+  </p>
+
+  <div th:replace="~{email/_layout :: refBadge(${booking.referenceCode})}">badge</div>
+
+  <table th:replace="~{email/_layout :: legBlock('Outbound trip', ${booking.outbound})}">outbound</table>
+  <table th:replace="${booking.returnLeg != null} ? ~{email/_layout :: legBlock('Return trip', ${booking.returnLeg})} : ~{}">return</table>
+
+  <h3 style="margin:22px 0 4px 0;font-size:15px;color:#1f2d3d;">Your booking</h3>
+  <table th:replace="~{email/_layout :: tripSummary(${booking})}">summary</table>
+
+  <p style="margin:20px 0 0 0;">
+    Need to change something? Just reply to this email and we&rsquo;ll take care of it.
+  </p>
+  <p style="margin:12px 0 0 0;">Safe travels,<br/>The Transfer Tourist Ohrid team</p>
+
+</div>
+</body>
+</html>

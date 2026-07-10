@@ -6,6 +6,20 @@ spring:
     password: ${DB_PASSWORD}
   jpa:
     show-sql: false
+  # Prod email → a real transactional SMTP provider (SendGrid/Mailgun/Brevo/SES),
+  # entirely from the environment. Set MAIL_HOST/PORT/USERNAME/PASSWORD plus
+  # APP_MAIL_FROM (a verified sender on your domain) and APP_MAIL_OPERATOR.
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 logging:
   level:

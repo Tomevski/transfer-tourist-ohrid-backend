@@ -14,6 +14,11 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
   flyway:
     enabled: false
+  # A host is required only so Boot auto-configures a JavaMailSender bean (which
+  # EmailServiceImpl depends on) during the context-load test. No mail is sent.
+  mail:
+    host: localhost
+    port: 1025
 
 app:
   cors:

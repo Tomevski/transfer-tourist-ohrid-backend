@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- To the customer: polite decline. Reply-to = operator. -->
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{email/_layout :: page('Update on your transfer request', ~{::content})}">
+<body>
+<div th:fragment="content">
+
+  <p style="margin:0;">Hi <span th:text="${booking.customer.firstName}">there</span>,</p>
+  <p style="margin:12px 0 0 0;">
+    Thank you for your transfer request. Unfortunately, we&rsquo;re unable to fulfil this
+    particular booking at the moment, and we&rsquo;re sorry for any inconvenience.
+  </p>
+
+  <div th:replace="~{email/_layout :: refBadge(${booking.referenceCode})}">badge</div>
+
+  <table th:replace="~{email/_layout :: legBlock('Requested trip', ${booking.outbound})}">outbound</table>
+  <table th:replace="${booking.returnLeg != null} ? ~{email/_layout :: legBlock('Return trip', ${booking.returnLeg})} : ~{}">return</table>
+
+  <p style="margin:20px 0 0 0;">
+    We&rsquo;d still love to help. Reply to this email with your dates and we&rsquo;ll do our
+    best to suggest an alternative that works for you.
+  </p>
+  <p style="margin:12px 0 0 0;">Warm regards,<br/>The Transfer Tourist Ohrid team</p>
+
+</div>
+</body>
+</html>

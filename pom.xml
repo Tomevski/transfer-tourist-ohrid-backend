@@ -42,6 +42,16 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!-- Email (Milestone 2.6): SMTP sending + Thymeleaf HTML templates -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
         <!-- Security (JWT-based stateless auth, Milestone 2.4) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
