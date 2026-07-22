@@ -21,6 +21,11 @@ spring:
           starttls:
             enable: true
 
+# Behind a TLS-terminating reverse proxy: honour X-Forwarded-* so request.getRemoteAddr()
+# (used by the login throttle) and HTTPS detection (for HSTS) reflect the real client.
+server:
+  forward-headers-strategy: framework
+
 logging:
   level:
     root: INFO

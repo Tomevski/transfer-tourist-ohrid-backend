@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 /**
@@ -54,6 +55,16 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // Security response headers (hardening). X-Content-Type-Options: nosniff
+                // stays on by default; we add a 1-year HSTS (honoured once served over
+                // HTTPS behind the prod proxy), deny framing, and a strict referrer policy.
+                .headers(headers -> headers
+                        .httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true)
+                                .maxAgeInSeconds(31_536_000L))
+                        .frameOptions(frame -> frame.deny())
+                        .referrerPolicy(referrer -> referrer
+                                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)))
                 .authorizeHttpRequests(auth -> auth
                         // Auth
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()

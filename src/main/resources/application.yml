@@ -53,3 +53,10 @@ app:
     email: ${APP_ADMIN_EMAIL:admin@transfertourist.com}
     password: ${APP_ADMIN_PASSWORD:admin123}
     name: ${APP_ADMIN_NAME:Ana (Admin)}
+  # Login throttle (Milestone 2.7): after `max-attempts` failures from one client
+  # IP within `window-seconds`, lock that IP out for `lockout-seconds` (429).
+  security:
+    login:
+      max-attempts: ${APP_LOGIN_MAX_ATTEMPTS:5}
+      window-seconds: ${APP_LOGIN_WINDOW_SECONDS:900}
+      lockout-seconds: ${APP_LOGIN_LOCKOUT_SECONDS:900}
