@@ -1,0 +1,13 @@
+# Railway deploy config for the backend service.
+# Builds from the Dockerfile in this repo; Railway injects PORT (honoured via
+# application.yml) and runs the healthcheck against the mail-independent
+# /actuator/health endpoint before switching traffic to a new deploy.
+
+[build]
+builder = "dockerfile"
+
+[deploy]
+healthcheckPath = "/actuator/health"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3

@@ -15,7 +15,8 @@ spring:
     baseline-on-migrate: true
 
 server:
-  port: ${SERVER_PORT:8080}
+  # Railway and similar PaaS inject PORT; fall back to SERVER_PORT, then 8080 locally.
+  port: ${PORT:${SERVER_PORT:8080}}
 
 # API versioning: all endpoints live under /api/v1 (set on controllers).
 springdoc:
@@ -30,6 +31,12 @@ management:
   endpoint:
     health:
       show-details: when-authorized
+  health:
+    # Email is best-effort (async, retried, swallowed on failure), so an SMTP
+    # outage must not mark the app DOWN — that would restart-loop it behind a
+    # platform healthcheck. Liveness reflects the app + database, not mail.
+    mail:
+      enabled: false
 
 # Comma-separated list of SPA origins allowed by CORS (see CorsConfig).
 app:

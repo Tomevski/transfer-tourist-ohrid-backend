@@ -1,0 +1,13 @@
+# Build output and local tooling — never needed inside the image build context.
+target/
+.git/
+.gitignore
+.idea/
+*.iml
+.mvn/
+mvnw
+mvnw.cmd
+Dockerfile
+.dockerignore
+docker-compose.yml
+README*.md
