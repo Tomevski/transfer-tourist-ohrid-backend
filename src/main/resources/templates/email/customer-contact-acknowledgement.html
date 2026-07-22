@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<!-- To the sender: acknowledgement that their message was received. Reply-to = operator. -->
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{email/_layout :: page('Thanks for reaching out', ~{::content})}">
+<body>
+<div th:fragment="content">
+
+  <p style="margin:0;">Hi <span th:text="${contact.firstName}">there</span>,</p>
+  <p style="margin:12px 0 0 0;">
+    Thanks for getting in touch with Transfer Tourist Ohrid! We&rsquo;ve received your
+    message and one of our team will get back to you as soon as possible.
+  </p>
+
+  <h3 style="margin:22px 0 4px 0;font-size:15px;color:#1f2d3d;">Your message</h3>
+  <div th:replace="~{email/_layout :: messageBlock(${contact.message})}">message</div>
+
+  <p style="margin:20px 0 0 0;">
+    If you need to add anything, just reply to this email.
+  </p>
+  <p style="margin:12px 0 0 0;">Warm regards,<br/>The Transfer Tourist Ohrid team</p>
+
+</div>
+</body>
+</html>

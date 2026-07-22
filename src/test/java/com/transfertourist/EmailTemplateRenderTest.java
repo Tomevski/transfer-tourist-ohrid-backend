@@ -3,6 +3,7 @@ package com.transfertourist;
 import com.transfertourist.constants.BookingStatus;
 import com.transfertourist.constants.TripType;
 import com.transfertourist.event.BookingEmailPayload;
+import com.transfertourist.event.ContactEmailPayload;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -75,6 +76,23 @@ class EmailTemplateRenderTest {
             assertThat(html).as("return %s", template)
                     .contains("Ohrid Airport")
                     .contains("Return trip");
+        }
+    }
+
+    @Test
+    void rendersBothContactTemplates() {
+        ContactEmailPayload contact = new ContactEmailPayload(
+                "Jane Doe", "Jane", "jane@example.com",
+                "Do you cover the airport at midnight?",
+                "Mon, 1 Jan 2026 at 09:00 UTC");
+        for (String template : new String[]{
+                "email/operator-contact-message",
+                "email/customer-contact-acknowledgement"}) {
+            Context ctx = new Context(Locale.ENGLISH);
+            ctx.setVariable("contact", contact);
+            String html = templateEngine.process(template, ctx);
+            assertThat(html).as("contact %s", template)
+                    .contains("Do you cover the airport at midnight?");
         }
     }
 }

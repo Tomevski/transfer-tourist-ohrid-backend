@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!-- To the operator: a new Contact Us message. Reply-to = the sender. -->
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{email/_layout :: page('New contact message', ~{::content})}">
+<body>
+<div th:fragment="content">
+
+  <p style="margin:0;">A new message came in through the Contact Us form.</p>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;font-size:14px;">
+    <tr>
+      <td style="color:#7a8aa0;width:130px;padding:3px 0;">From</td>
+      <td th:text="${contact.fullName}">Jane Doe</td>
+    </tr>
+    <tr>
+      <td style="color:#7a8aa0;padding:3px 0;">Email</td>
+      <td><a th:href="'mailto:' + ${contact.email}" th:text="${contact.email}"
+             style="color:#2f80ed;text-decoration:none;">jane@example.com</a></td>
+    </tr>
+    <tr>
+      <td style="color:#7a8aa0;padding:3px 0;">Received</td>
+      <td th:text="${contact.receivedAt}">Mon, 1 Jan 2026 at 09:00 UTC</td>
+    </tr>
+  </table>
+
+  <h3 style="margin:22px 0 4px 0;font-size:15px;color:#1f2d3d;">Message</h3>
+  <div th:replace="~{email/_layout :: messageBlock(${contact.message})}">message</div>
+
+  <p style="margin:20px 0 0 0;color:#7a8aa0;font-size:13px;">
+    Just reply to this email to respond &mdash; it goes straight to the sender.
+  </p>
+
+</div>
+</body>
+</html>

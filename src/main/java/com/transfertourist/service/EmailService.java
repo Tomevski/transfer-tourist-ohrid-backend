@@ -1,6 +1,7 @@
 package com.transfertourist.service;
 
 import com.transfertourist.event.BookingEmailPayload;
+import com.transfertourist.event.ContactEmailPayload;
 
 /**
  * Renders and sends the transactional booking emails (Milestone 2.6). All
@@ -22,4 +23,10 @@ public interface EmailService {
 
     /** To the customer: the operator declined the booking. */
     void sendCustomerDecline(BookingEmailPayload booking);
+
+    /** To the operator: a new Contact Us message. Reply-to = the sender. */
+    void sendOperatorContactMessage(ContactEmailPayload contact);
+
+    /** To the sender: acknowledgement that their message was received. Reply-to = operator. */
+    void sendContactAcknowledgement(ContactEmailPayload contact);
 }

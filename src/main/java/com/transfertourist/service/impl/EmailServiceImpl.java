@@ -1,6 +1,7 @@
 package com.transfertourist.service.impl;
 
 import com.transfertourist.event.BookingEmailPayload;
+import com.transfertourist.event.ContactEmailPayload;
 import com.transfertourist.service.EmailService;
 import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
@@ -81,9 +82,30 @@ public class EmailServiceImpl implements EmailService {
                 operatorAddress, booking.referenceCode());
     }
 
+    @Override
+    public void sendOperatorContactMessage(ContactEmailPayload contact) {
+        // Operator email: reply-to the sender so a reply reaches them directly.
+        send("email/operator-contact-message", context(contact), operatorAddress,
+                "New contact message from " + contact.fullName(),
+                contact.email(), contact.email());
+    }
+
+    @Override
+    public void sendContactAcknowledgement(ContactEmailPayload contact) {
+        send("email/customer-contact-acknowledgement", context(contact), contact.email(),
+                "We received your message · Transfer Tourist Ohrid",
+                operatorAddress, contact.email());
+    }
+
     private Context context(BookingEmailPayload booking) {
         Context ctx = new Context(Locale.ENGLISH);
         ctx.setVariable("booking", booking);
+        return ctx;
+    }
+
+    private Context context(ContactEmailPayload contact) {
+        Context ctx = new Context(Locale.ENGLISH);
+        ctx.setVariable("contact", contact);
         return ctx;
     }
 
@@ -91,10 +113,10 @@ public class EmailServiceImpl implements EmailService {
      * Renders the template and sends the message, retrying transient failures.
      * Never throws: a final failure is logged and swallowed.
      *
-     * @param referenceCode carried only for log correlation
+     * @param logRef short correlation token (booking ref code or sender email) for logs
      */
     private void send(String template, Context context, String to, String subject,
-                      String replyTo, String referenceCode) {
+                      String replyTo, String logRef) {
         String html = templateEngine.process(template, context);
 
         for (int attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
@@ -110,18 +132,18 @@ public class EmailServiceImpl implements EmailService {
                     helper.setReplyTo(replyTo);
                 }
                 mailSender.send(message);
-                log.info("Sent '{}' email to {} (booking {})", template, to, referenceCode);
+                log.info("Sent '{}' email to {} [{}]", template, to, logRef);
                 return;
             } catch (MailException | jakarta.mail.MessagingException ex) {
-                log.warn("Attempt {}/{} to send '{}' to {} (booking {}) failed: {}",
-                        attempt, MAX_ATTEMPTS, template, to, referenceCode, ex.getMessage());
+                log.warn("Attempt {}/{} to send '{}' to {} [{}] failed: {}",
+                        attempt, MAX_ATTEMPTS, template, to, logRef, ex.getMessage());
                 if (attempt < MAX_ATTEMPTS) {
                     sleepBeforeRetry(attempt);
                 }
             }
         }
-        log.error("Giving up: could not send '{}' email to {} (booking {}) after {} attempts",
-                template, to, referenceCode, MAX_ATTEMPTS);
+        log.error("Giving up: could not send '{}' email to {} [{}] after {} attempts",
+                template, to, logRef, MAX_ATTEMPTS);
     }
 
     private void sleepBeforeRetry(int attempt) {
