@@ -1,7 +1,9 @@
 spring:
   datasource:
-    # All connection details come from the environment in production.
-    url: ${DB_URL}
+    # Connection details come from the environment. Use DB_URL directly if set
+    # (Railway), otherwise compose it from host/port/name parts (Render exposes
+    # these separately from its managed database).
+    url: ${DB_URL:jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   jpa:
